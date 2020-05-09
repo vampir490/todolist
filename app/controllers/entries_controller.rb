@@ -3,7 +3,7 @@ class EntriesController < ApplicationController
 
   # GET /entries
   def index
-    @entries = Entry.all
+    @entries = policy_scope(Entry)
   end
 
   # GET /entries/new
@@ -14,6 +14,7 @@ class EntriesController < ApplicationController
 
   # GET /entries/1/edit
   def edit
+    authorize @entry
   end
 
   # POST /entries
@@ -31,6 +32,8 @@ class EntriesController < ApplicationController
 
   # PATCH/PUT /entries/1
   def update
+    authorize @entry
+
     if @entry.update(entry_params)
       redirect_to entries_url, notice: 'Entry was successfully updated.'
     else
@@ -40,6 +43,8 @@ class EntriesController < ApplicationController
 
   # DELETE /entries/1
   def destroy
+    authorize @entry
+
     @entry.destroy
     redirect_to entries_url, notice: 'Entry was successfully destroyed.'
   end

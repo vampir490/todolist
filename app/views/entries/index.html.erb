@@ -2,7 +2,9 @@
 
 <% if user_signed_in? %>
   <div>
-    <%= link_to 'New Task', new_entry_path %>
+    <% if policy(Entry).create? %>
+      <%= link_to 'New Task', new_entry_path %>
+    <% end %>
   </div>
   <div class="row">
     <div class="col-md-10 col-md-offset-1">
