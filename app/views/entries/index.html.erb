@@ -1,14 +1,16 @@
 <h1>Entries</h1>
 
-<div>
-  <%= link_to 'New Task', new_entry_path %>
-</div>
-<div class="row">
-  <div class="col-md-10 col-md-offset-1">
-    <div class="row">
-      <div class="buffer-top games-table">
-        <%= render 'entries' %>
+<% if user_signed_in? %>
+  <div>
+    <%= link_to 'New Task', new_entry_path %>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="row">
+        <div class="buffer-top games-table">
+          <%= render 'entries' %>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<% end %>
