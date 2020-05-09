@@ -9,6 +9,7 @@ class EntriesController < ApplicationController
   # GET /entries/new
   def new
     @entry = current_user.entries.build
+    authorize @entry
   end
 
   # GET /entries/1/edit
@@ -18,6 +19,8 @@ class EntriesController < ApplicationController
   # POST /entries
   def create
     @entry = current_user.entries.build(entry_params)
+
+    authorize @entry
 
     if @entry.save
       redirect_to entries_url, notice: 'Entry was successfully created.'

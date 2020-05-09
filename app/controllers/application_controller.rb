@@ -9,4 +9,13 @@ class ApplicationController < ActionController::Base
       keys: [:password, :password_confirmation, :current_password]
     )
   end
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
+  private
+
+  def user_not_authorized
+    flash[:alert] = ' You are notauthorized'
+    redirect_to(request.referrer || root_path)
+  end
 end
