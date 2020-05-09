@@ -1,6 +1,9 @@
-<h1>Editing Entry</h1>
+<h1>Edit Entry</h1>
 
-<%= render 'form', entry: @entry %>
+<div class="row">
+  <div class="col-md-6 buffer-top">
+    <%= render 'form', entry: @entry %>
+  </div>
+</div>
 
-<%= link_to 'Show', @entry %> |
 <%= link_to 'Back', entries_path %>
