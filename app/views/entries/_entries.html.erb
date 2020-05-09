@@ -11,12 +11,12 @@
     </tr>
     </thead>
 
-    <% @entries.each_with_index do |entry, index| %>
+    <% current_user.entries.each_with_index do |entry, index| %>
       <tbody>
       <tr class="text-center">
         <th scope="row"><%= index + 1 %></th>
         <td><%= entry.text %></td>
-        <td><%= entry.duedate.strftime("%B %d, %Y, %H:%M") %></td>
+        <td><%= entry.duedate.strftime("%B %d, %Y, %H:%M") if entry.duedate %></td>
         <td><%= entry.priority %></td>
         <td><%= "✓" if entry.completed %></td>
         <td>
