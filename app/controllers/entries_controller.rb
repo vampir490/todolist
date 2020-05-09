@@ -6,10 +6,6 @@ class EntriesController < ApplicationController
     @entries = Entry.all
   end
 
-  # GET /entries/1
-  def show
-  end
-
   # GET /entries/new
   def new
     @entry = Entry.new
@@ -24,7 +20,7 @@ class EntriesController < ApplicationController
     @entry = Entry.new(entry_params)
 
     if @entry.save
-      redirect_to @entry, notice: 'Entry was successfully created.'
+      redirect_to entries_url, notice: 'Entry was successfully created.'
     else
       render :new
     end
@@ -33,7 +29,7 @@ class EntriesController < ApplicationController
   # PATCH/PUT /entries/1
   def update
     if @entry.update(entry_params)
-      redirect_to @entry, notice: 'Entry was successfully updated.'
+      redirect_to entries_url, notice: 'Entry was successfully updated.'
     else
       render :edit
     end
@@ -52,7 +48,7 @@ class EntriesController < ApplicationController
     end
 
     # Only allow a trusted parameter "white list" through.
-    def entry_params
-      params.require(:entry).permit(:new, :create, :edit, :update, :destroy)
-    end
+  def entry_params
+    params.require(:entry).permit(:text, :duedate, :priority, :completed)
+  end
 end

@@ -14,8 +14,7 @@
 
   <div class="form-group">
     <%= f.label :priority %>
-    <%= f.select(:priority, options_for_select(
-        [1, 2, 3], 1 ),
+    <%= f.select(:priority, options_for_select([1, 2, 3], 1),
                   class: 'form-control custom-select custom-select-lg mb-3') %>
   </div>
 
@@ -31,4 +30,3 @@
     or <%= link_to 'return', :back %>
   </div>
 <% end %>
-
