@@ -1,0 +1,19 @@
+<% errors = model.errors %>
+
+<% if errors.any? %>
+  <div class="alert alert-danger">
+    <div class="lead buffer-bottom">
+      <% if errors.count > 1 %>
+        There are <%= errors.count %> errors on the form
+      <% else %>
+        There is an error on the form
+      <% end %>
+    </div>
+
+    <ul>
+      <% errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

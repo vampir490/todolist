@@ -1,42 +1,34 @@
-<%= form_with(model: entry, local: true) do |form| %>
-  <% if entry.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(entry.errors.count, "error") %> prohibited this entry from being saved:</h2>
+<%= form_for(@entry) do |f| %>
+  <%= render partial: 'partials/form_errors', locals: {model: @entry} %>
 
-      <ul>
-      <% entry.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+  <div class="form-group">
+    <%= f.label :task %>
+    <%= f.text_area :text, class: 'form-control', placeholder: @entry.text %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :due_date %>
+    <p><%= f.text_field :duedate, id: 'flatpickr-input', class: 'form-control',
+                        placeholder: @entry.duedate %></p>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :priority %>
+    <%= f.select(:priority, options_for_select(
+        [1, 2, 3], 1 ),
+                  class: 'form-control custom-select custom-select-lg mb-3') %>
+  </div>
+
+  <div class="field form-group">
+    <div class="checkbox-inline">
+      <%= f.check_box :completed %>
+      <%= f.label :completed, "Completed" %><br>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :new %>
-    <%= form.text_field :new %>
   </div>
 
-  <div class="field">
-    <%= form.label :create %>
-    <%= form.text_field :create %>
-  </div>
-
-  <div class="field">
-    <%= form.label :edit %>
-    <%= form.text_field :edit %>
-  </div>
-
-  <div class="field">
-    <%= form.label :update %>
-    <%= form.text_field :update %>
-  </div>
-
-  <div class="field">
-    <%= form.label :destroy %>
-    <%= form.text_field :destroy %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
+  <div class="actions buffer-bottom">
+    <%= f.submit 'Save', class: 'btn btn-primary' %>
+    or <%= link_to 'return', :back %>
   </div>
 <% end %>
+
