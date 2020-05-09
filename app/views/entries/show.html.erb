@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>New:</strong>
+  <%= @entry.new %>
+</p>
+
+<p>
+  <strong>Create:</strong>
+  <%= @entry.create %>
+</p>
+
+<p>
+  <strong>Edit:</strong>
+  <%= @entry.edit %>
+</p>
+
+<p>
+  <strong>Update:</strong>
+  <%= @entry.update %>
+</p>
+
+<p>
+  <strong>Destroy:</strong>
+  <%= @entry.destroy %>
+</p>
+
+<%= link_to 'Edit', edit_entry_path(@entry) %> |
+<%= link_to 'Back', entries_path %>
