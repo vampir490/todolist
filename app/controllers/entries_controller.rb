@@ -1,19 +1,12 @@
 class EntriesController < ApplicationController
-  before_action :set_entry, only: [:edit, :update, :destroy]
+  before_action :set_entry, only: [:edit, :update, :destroy, :complete]
 
-  helper_method :sort_column, :sort_direction
+  before_action :set_entries, only: [:index]
+
+  helper_method :sort_column, :sort_direction, :set_entries
 
   # GET /entries
   def index
-    # If to show is accepted by Pundit Policy
-    # it shows the table with tasks, ordered by column
-    items_to_show = policy_scope(Entry)
-
-    if items_to_show
-      @entries = policy_scope(Entry).order(sort_column + " " + sort_direction)
-    else
-      @entries = policy_scope(Entry)
-    end
   end
 
   # GET /entries/new
@@ -45,9 +38,15 @@ class EntriesController < ApplicationController
     authorize @entry
 
     if @entry.update(entry_params)
-      redirect_to entries_url, notice: 'Entry was successfully updated.'
+      respond_to do |format|
+        format.html do
+          redirect_to entries_url, notice: 'Entry was successfully updated.'
+        end
+
+        format.js { render 'entries', entries: set_entries }
+      end
     else
-      render :edit
+      redirect_to entries_url, alert: 'Entry was not updated.'
     end
   end
 
@@ -60,12 +59,24 @@ class EntriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_entry
-      @entry = Entry.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
+  # Use callbacks to share common setup or constraints between actions.
+  def set_entry
+    @entry = Entry.find(params[:id])
+  end
+
+  def set_entries
+    # it shows the table with tasks, ordered by column
+    items_to_show = policy_scope(Entry)
+
+    if items_to_show
+      @entries = items_to_show.order(sort_column + " " + sort_direction)
+    else
+      @entries = nil
+    end
+  end
+
+  # Only allow a trusted parameter "white list" through.
   def entry_params
     params.require(:entry).permit(:text, :duedate, :priority, :completed)
   end

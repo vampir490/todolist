@@ -10,7 +10,7 @@
     <div class="col-md-10 col-md-offset-1">
       <div class="row">
         <div class="buffer-top games-table">
-          <%= render 'entries' %>
+          <%= render 'entries', locals: { entries: @entries } %>
         </div>
       </div>
     </div>
