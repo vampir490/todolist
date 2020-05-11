@@ -4,17 +4,17 @@
     <tr>
       <th scope="col", class="text-center">#</th>
       <th scope="col", class="text-center">Task</th>
-      <th scope="col", class="text-center">Due Date</th>
-      <th scope="col", class="text-center">Priority</th>
+      <th scope="col", class="text-center"><%= sortable "duedate" %></th>
+      <th scope="col", class="text-center"><%= sortable "priority" %></th>
       <th scope="col", class="text-center">Completed</th>
       <th scope="col", class="text-center">Actions</th>
     </tr>
     </thead>
 
-    <% current_user.entries.each_with_index do |entry, index| %>
+    <% @entries.each_with_index do |entry, index| %>
       <tbody>
       <tr class="text-center">
-        <th scope="row"><%= index + 1 %></th>
+        <td><b><%= index + 1 %></b></td>
         <td><%= entry.text %></td>
         <td><%= entry.duedate.strftime("%B %d, %Y, %H:%M") if entry.duedate %></td>
         <td><%= entry.priority %></td>

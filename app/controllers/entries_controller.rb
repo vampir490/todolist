@@ -1,9 +1,19 @@
 class EntriesController < ApplicationController
   before_action :set_entry, only: [:edit, :update, :destroy]
 
+  helper_method :sort_column, :sort_direction
+
   # GET /entries
   def index
-    @entries = policy_scope(Entry)
+    # If to show is accepted by Pundit Policy
+    # it shows the table with tasks, ordered by column
+    items_to_show = policy_scope(Entry)
+
+    if items_to_show
+      @entries = policy_scope(Entry).order(sort_column + " " + sort_direction)
+    else
+      @entries = policy_scope(Entry)
+    end
   end
 
   # GET /entries/new
@@ -58,5 +68,13 @@ class EntriesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
   def entry_params
     params.require(:entry).permit(:text, :duedate, :priority, :completed)
+  end
+
+  def sort_column
+    Entry.column_names.include?(params[:sort]) ? params[:sort] : "priority"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 end
