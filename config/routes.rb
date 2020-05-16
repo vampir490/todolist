@@ -4,4 +4,10 @@ Rails.application.routes.draw do
 
   resources :entries, except: [:show]
   resources :users, only: [:edit, :update]
+
+  namespace :api do
+    namespace :v1 do
+      resources :entries, only: [:index, :create, :update, :destroy]
+    end
+  end
 end
