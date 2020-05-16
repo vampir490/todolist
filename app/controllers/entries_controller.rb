@@ -3,7 +3,7 @@ class EntriesController < ApplicationController
 
   before_action :set_entries, only: [:index]
 
-  helper_method :sort_column, :sort_direction, :set_entries
+  helper_method :sort_column, :sort_direction
 
   # GET /entries
   def index

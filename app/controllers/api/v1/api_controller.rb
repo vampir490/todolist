@@ -1,6 +1,6 @@
 module Api
   module V1
-    class ApiController < ApplicationController
+    class ApiController < ActionController::Base
       before_action :authorize
 
       private
