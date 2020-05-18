@@ -22,7 +22,9 @@ module Api
       end
 
       def update
-        #TODO update only your tasks via Pundit
+        # Using Pundit to identify user of the record
+        authorize @entry
+
         if @entry.update(entry_params)
           render json: @entry
         else
@@ -31,7 +33,9 @@ module Api
       end
 
       def destroy
-        #TODO destroy only your tasks via Pundit
+        # Using Pundit to identify user of the record
+        authorize @entry
+
         @entry.destroy
       end
 
@@ -41,14 +45,17 @@ module Api
         params.require(:entry).permit(:text, :duedate, :priority, :completed, :token)
       end
 
+      # The method to identify record
       def set_entry
         @entry = Entry.find(params[:id])
       end
 
+      # If the parameter of sorting is missed we use priority as default
       def sort_column
         Entry.column_names.include?(params[:sort]) ? params[:sort] : "priority"
       end
 
+      # If the direction of sorting is missed in the parameters we use asc as default
       def sort_direction
         %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
       end
