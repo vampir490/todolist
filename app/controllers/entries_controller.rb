@@ -1,17 +1,16 @@
 class EntriesController < ApplicationController
   before_action :set_entry, only: [:edit, :update, :destroy, :complete]
 
-  before_action :set_entries, only: [:index]
-
   helper_method :sort_column, :sort_direction
 
   # GET /entries
   def index
+    set_entries
   end
 
   # GET /entries/new
   def new
-    @entry = current_user.entries.build
+    @entry = Entry.new
     authorize @entry
   end
 
@@ -22,9 +21,12 @@ class EntriesController < ApplicationController
 
   # POST /entries
   def create
-    @entry = current_user.entries.build(entry_params)
+    @entry = Entry.new(entry_params)
 
+    # Checking pundit policy whether we let this user create entry
     authorize @entry
+
+    @entry.user = current_user
 
     if @entry.save
       redirect_to entries_url, notice: 'Entry was successfully created.'
