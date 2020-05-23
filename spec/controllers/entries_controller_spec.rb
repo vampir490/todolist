@@ -61,8 +61,43 @@ RSpec.describe EntriesController, type: :controller do
       it 'sorts entries by default' do
         get :index
         expect(assigns(:entries).count).to eq 3
-        expect(assigns(:entries).where(priority: 1, user: @user).first).to eq(@user.entries.first)
-        expect(assigns(:entries).where(priority: 3, user: @user).first).to eq(@user.entries.last)
+        expect(assigns(:entries)[0]).to eq(@user.entries.where(priority: 1).first)
+        expect(assigns(:entries)[2]).to eq(@user.entries.where(priority: 3).first)
+      end
+
+      # Test if it sorts with direction: desc, parameter: due_date
+      it 'sorts entries with params' do
+        get :index, params: { direction: 'desc', sort: 'duedate' }
+        expect(assigns(:entries).count).to eq 3
+        expect(assigns(:entries)[0]).to eq(@user.entries.where(duedate: "2803-07-01 21:00:00").first)
+        expect(assigns(:entries)[2]).to eq(@user.entries.where(duedate: "2801-07-01 21:00:00").first)
+      end
+    end
+
+    describe '#update' do
+      before do
+        @entry = Entry.create!(
+          text: "Entry before update",
+          priority: 1,
+          duedate: Time.parse("02/07/2802"),
+          user: @user
+        )
+      end
+
+      it 'redirects to entries_url' do
+        put :update, params: { id: @entry.id, entry: @params }
+
+        expect(response).to redirect_to(entries_url)
+      end
+
+      it 'updates entry' do
+        put :update, params: { id: @entry.id, entry: @params }
+        @entry.reload
+
+        expect(@entry.text).to eq 'Test text'
+        expect(@entry.duedate).to eq '2800-07-01 21:00:00'
+        expect(@entry.priority).to eq 2
+        expect(@entry.completed).to eq true
       end
     end
   end
@@ -85,6 +120,25 @@ RSpec.describe EntriesController, type: :controller do
         get :index
         expect(response.status).to eq(200)
         expect(assigns(:entries)).to be_nil
+      end
+    end
+
+    describe '#update' do
+      before do
+        @entry = Entry.create!(
+          text: "Entry before update",
+          priority: 1,
+          duedate: Time.parse("02/07/2802"),
+          user: @user
+        )
+      end
+
+      it 'does not let update' do
+        put :update, params: { id: @entry.id, entry: @params }
+
+        expect(response.status).not_to eq(200)
+        expect(response).to redirect_to(root_path)
+        expect(flash[:alert]).to be
       end
     end
   end
