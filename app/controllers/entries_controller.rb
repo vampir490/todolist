@@ -83,10 +83,12 @@ class EntriesController < ApplicationController
     params.require(:entry).permit(:text, :duedate, :priority, :completed)
   end
 
+  # Sorting by priority by default
   def sort_column
     Entry.column_names.include?(params[:sort]) ? params[:sort] : "priority"
   end
 
+  # By default sorting asc
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
