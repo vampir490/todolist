@@ -15,9 +15,9 @@ RSpec.describe EntriesController, type: :controller do
                         token: '123456')
 
     # Creating alternative user
-    @another_user = User.create(email: '1@r.ru',
+    @another_user = User.create(email: '2@r.ru',
                                 password: '123456',
-                                token: '123456')
+                                token: '654321')
   end
 
   # User authorised

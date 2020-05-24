@@ -8,6 +8,11 @@ RSpec.describe Api::V1::EntriesController, type: :controller do
                         password: '123456',
                         token: @token)
 
+    # Creating alternative user
+    @another_user = User.create(email: '2@r.ru',
+                                password: '123456',
+                                token: '654321')
+
     @params = {
       text: 'Test text',
       duedate: Time.parse("02/07/2800"),
@@ -78,7 +83,37 @@ RSpec.describe Api::V1::EntriesController, type: :controller do
     end
 
     describe '#index' do
-      it ''
+      it 'returns entries of the user' do
+        # Creating several entries with different priorities and due_dates
+        entries = (1..3).map do |i|
+          Entry.create!(
+            text: "Test task #{i}",
+            priority: i,
+            duedate: Time.parse("02/07/280#{i}"),
+            user: @user
+          )
+        end
+        # Creating alternative entry of another user
+        Entry.create!(
+          text: "Test task another user",
+          priority: 1,
+          duedate: Time.parse("02/07/2804"),
+          user: @another_user
+        )
+        get :index, params: {token: @token}
+
+        json_response = JSON.parse(response.body)
+        expect(json_response.length).to eq 3
+        expect(json_response.first['id']).to eq entries[0].id
+      end
+
+      # If there is no entry of the user, it returns empty array
+      it 'returns empty array' do
+        get :index, params: {token: @another_user.token}
+
+        json_response = JSON.parse(response.body)
+        expect(json_response.length).to eq 0
+      end
     end
   end
 
